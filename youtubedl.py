@@ -4,27 +4,43 @@ import os
 from youtube_search import YoutubeSearch
 import eyed3
 import requests
-links=YoutubeSearch(input("Enter the name of the song you want to download\n"),max_results=1).to_dict()
-final_url="https://www.youtube.com"+links[0]["url_suffix"]
-parent_dir=r"C:\Users\Owner\PycharmProjects\Codechef"
-yt=pytube.YouTube(final_url)
-print("Title: ",yt.title)
-ys=yt.streams.filter(only_audio=True)
-ys[0].download()
-new_filename = yt.title+".mp3"
-mp4=os.listdir(parent_dir)
-default_filename=ys[0].default_filename
-subprocess.run([
-    'ffmpeg',
-    '-i', os.path.join(parent_dir, default_filename),
-    os.path.join(parent_dir, new_filename)
-])
-for item in mp4:
-    if item.endswith(".mp4"):
-        os.remove(os.path.join(parent_dir, item))
-audiofile=eyed3.load(new_filename)
-audiofile.tag.album_artist=links[0]['channel']
-audiofile.tag.title=yt.title
-res=requests.get(links[0]["thumbnails"][0])
-audiofile.tag.images.set(3, res.content , "" ,u"")
-audiofile.tag.save()
+from bs4 import BeautifulSoup
+search_key=input("Enter the name of the song you want to download or the playlist\n")
+def downloader(name):
+    links=YoutubeSearch(name,max_results=1).to_dict()
+    final_url="https://www.youtube.com"+links[0]["url_suffix"]
+    parent_dir=os.path.dirname(os.path.abspath(__file__))
+    yt=pytube.YouTube(final_url)
+    print("Title: ",yt.title)
+    ys=yt.streams.filter(only_audio=True)
+    ys[0].download()
+    new_filename = yt.title+".mp3"
+    mp4=os.listdir(parent_dir)
+    default_filename=ys[0].default_filename
+    subprocess.run([
+        'ffmpeg',
+        '-i', os.path.join(parent_dir, default_filename),
+        os.path.join(parent_dir, new_filename)
+    ])
+    for item in mp4:
+        if item.endswith(".mp4"):
+            os.remove(os.path.join(parent_dir, item))
+    audiofile=eyed3.load(new_filename)
+    audiofile.tag.album_artist=links[0]['channel']
+    audiofile.tag.title=yt.title
+    res=requests.get(links[0]["thumbnails"][0])
+    audiofile.tag.images.set(3, res.content , "" ,u"")
+    audiofile.tag.save()
+
+if(search_key[:5]=="https"):
+    with requests.session() as r:
+        res = r.get("https://open.spotify.com/playlist/37i9dQZEVXcQhFnSXn44a0?si=lQ-frZCqRVCUSvmI6GWC3Q")
+        soup = BeautifulSoup(res.text, features="html.parser")
+        for song_name in soup.find_all('span', {'class': 'track-name'}):
+            try:
+                downloader(song_name.text)
+            except:
+                pass
+else:
+    downloader(search_key)
+
