@@ -5,11 +5,10 @@ from youtube_search import YoutubeSearch
 import eyed3
 import requests
 from bs4 import BeautifulSoup
-search_key=input("Enter the name of the song you want to download or the playlist\n")
 def downloader(name):
     links=YoutubeSearch(name,max_results=1).to_dict()
     final_url="https://www.youtube.com"+links[0]["url_suffix"]
-    parent_dir=os.path.dirname(os.path.abspath(__file__))
+    parent_dir=os.getcwd()
     yt=pytube.YouTube(final_url)
     print("Title: ",yt.title)
     ys=yt.streams.filter(only_audio=True)
@@ -32,15 +31,15 @@ def downloader(name):
     audiofile.tag.images.set(3, res.content , "" ,u"")
     audiofile.tag.save()
 
-if(search_key[:5]=="https"):
-    with requests.session() as r:
-        res = r.get("https://open.spotify.com/playlist/37i9dQZEVXcQhFnSXn44a0?si=lQ-frZCqRVCUSvmI6GWC3Q")
-        soup = BeautifulSoup(res.text, features="html.parser")
-        for song_name in soup.find_all('span', {'class': 'track-name'}):
-            try:
-                downloader(song_name.text)
-            except:
-                pass
-else:
-    downloader(search_key)
-
+def run(search_key):
+    if(search_key[:5]=="https"):
+        with requests.session() as r:
+            res = r.get(search_key)
+            soup = BeautifulSoup(res.text, features="html.parser")
+            for song_name in soup.find_all('span', {'class': 'track-name'}):
+                try:
+                    downloader(song_name.text)
+                except:
+                    pass
+    else:
+        downloader(search_key)
