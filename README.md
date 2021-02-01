@@ -6,3 +6,6 @@ must have ffmpeg(https://ffmpeg.org/download.html) in path to use it
 Requirements-
 pip install youtube_search eyed3 requests bs4 pytube PyQt5
 
+
+Made a exe file, make sure to extract everything in a single folder
+Link-https://drive.google.com/file/d/1gEKtduBwRBkSoaFsNDW9xMXE19GMdg_N/view?usp=sharing
