@@ -8,4 +8,4 @@ pip install youtube_search eyed3 requests bs4 pytube PyQt5
 
 
 Made a exe file, make sure to extract everything in a single folder
-Link-https://drive.google.com/file/d/1gEKtduBwRBkSoaFsNDW9xMXE19GMdg_N/view?usp=sharing
+Link-https://drive.google.com/file/d/19JP1bxK6pl25dzMnzf0Go1g_4HsLveu3/view?usp=sharing
