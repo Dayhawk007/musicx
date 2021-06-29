@@ -7,5 +7,5 @@ Requirements-
 `pip install youtube_search eyed3 requests bs4 pytube PyQt5`
 
 
-Made a exe file, make sure to extract everything in a single folder
-Link-https://drive.google.com/file/d/19JP1bxK6pl25dzMnzf0Go1g_4HsLveu3/view?usp=sharing
+Made a windows build make sure all of the files are in the same folder when you download it
+Link-https://drive.google.com/drive/folders/1ZjH7bhLWb5V79LfBtmW0BFIWhZiv3dOS?usp=sharing
