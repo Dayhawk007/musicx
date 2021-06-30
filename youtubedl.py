@@ -41,7 +41,7 @@ def downloader(name):
 def downloaderytpl(name):
     char_to_ignore=['#','<','>','$','%','!','&','*',"'",'"','?','{','}','/','\\'"",'@','+','`','|','=']
     parent_dir=os.getcwd()
-    pl=pytube.Playlist("https://www.youtube.com/watch?v=S2dRcipMCpw&list=PLDIoUOhQQPlXqz5QZ3dx-lh_p6RcPeKjv")
+    pl=pytube.Playlist(name)
     for video in pl.videos:
         print("Title: ", video.title)
         ys = video.streams.filter(only_audio=True)
@@ -102,7 +102,6 @@ def run(search_key):
                     downloader(song)
         elif(broken_url[2]=="www.youtube.com"):
             if "&list" in search_key:
-                print("ok")
                 downloaderytpl(search_key)
             else:
                 downloader(search_key)
