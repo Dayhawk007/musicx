@@ -1,6 +1,6 @@
 # music-downloader
 A python script which downloads any song on your device just by the name of it
-You can use the song name or a spotify playlist link
+You can download with song name,yt link,spotify link,yt playlist and spotify playlist 
 must have ffmpeg(https://ffmpeg.org/download.html) in the directory to use it
 
 Requirements-
