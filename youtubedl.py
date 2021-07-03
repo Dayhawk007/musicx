@@ -7,47 +7,15 @@ import requests
 from bs4 import BeautifulSoup
 def downloader(name):
     char_to_ignore=['#','<','>','$','%','!','&','*',"'",'"','?','{','}','/','\\'"",'@','+','`','|','=']
-    links=YoutubeSearch(name,max_results=1).to_dict()
-    final_url="https://www.youtube.com"+links[0]["url_suffix"]
-    parent_dir=os.getcwd()
-    yt=pytube.YouTube(final_url)
-    print("Title: ",yt.title)
-    ys=yt.streams.filter(only_audio=True)
-    ys[0].download()
-    new_filename = yt.title+".mp3"
-    for char in char_to_ignore:
-        if char in new_filename:
-            new_filename=new_filename.replace(char,"-")
-    mp4=os.listdir(parent_dir)
-    default_filename=ys[0].default_filename
     try:
-        subprocess.run([
-            os.getcwd()+r"\ffmpeg",
-            '-i', os.path.join(parent_dir, default_filename),
-            os.path.join(parent_dir,new_filename)
-        ])
-        for item in mp4:
-            if item.endswith(".mp4"):
-                os.remove(os.path.join(parent_dir, item))
-        audiofile=eyed3.load(new_filename)
-        audiofile.tag.album_artist=links[0]['channel']
-        audiofile.tag.title=yt.title
-        res=requests.get(links[0]["thumbnails"][0])
-        audiofile.tag.images.set(3, res.content , "" ,u"")
-        audiofile.tag.save()
-    except:
-        print("FFMPEG error")
-
-def downloaderytpl(name):
-    char_to_ignore=['#','<','>','$','%','!','&','*',"'",'"','?','{','}','/','\\'"",'@','+','`','|','=']
-    parent_dir=os.getcwd()
-    pl=pytube.Playlist(name)
-    for video in pl.videos:
-        print("Title: ", video.title)
-        ys = video.streams.filter(only_audio=True)
-        links = YoutubeSearch(video.title, max_results=1).to_dict()
+        links=YoutubeSearch(name,max_results=1).to_dict()
+        final_url="https://www.youtube.com"+links[0]["url_suffix"]
+        parent_dir=os.getcwd()
+        yt=pytube.YouTube(final_url)
+        print("Title: ",yt.title)
+        ys=yt.streams.filter(only_audio=True)
         ys[0].download()
-        new_filename = video.title+".mp3"
+        new_filename = yt.title+".mp3"
         for char in char_to_ignore:
             if char in new_filename:
                 new_filename=new_filename.replace(char,"-")
@@ -64,13 +32,50 @@ def downloaderytpl(name):
                     os.remove(os.path.join(parent_dir, item))
             audiofile=eyed3.load(new_filename)
             audiofile.tag.album_artist=links[0]['channel']
-            audiofile.tag.title=video.title
+            audiofile.tag.title=yt.title
             res=requests.get(links[0]["thumbnails"][0])
             audiofile.tag.images.set(3, res.content , "" ,u"")
             audiofile.tag.save()
         except:
             print("FFMPEG error")
+    except:
+        print("Song not available on stream servers")
 
+def downloaderytpl(name):
+    char_to_ignore=['#','<','>','$','%','!','&','*',"'",'"','?','{','}','/','\\'"",'@','+','`','|','=']
+    parent_dir=os.getcwd()
+    pl=pytube.Playlist(name)
+    for video in pl.videos:
+        try:
+            print("Title: ", video.title)
+            links = YoutubeSearch(video.title, max_results=1).to_dict()
+            ys = video.streams.filter(only_audio=True)
+            ys[0].download()
+            new_filename = video.title+".mp3"
+            for char in char_to_ignore:
+                if char in new_filename:
+                    new_filename=new_filename.replace(char,"-")
+                mp4=os.listdir(parent_dir)
+                default_filename=ys[0].default_filename
+                try:
+                    subprocess.run([
+                        os.getcwd()+r"\ffmpeg",
+                        '-i', os.path.join(parent_dir, default_filename),
+                        os.path.join(parent_dir,new_filename)
+                    ])
+                    for item in mp4:
+                        if item.endswith(".mp4"):
+                            os.remove(os.path.join(parent_dir, item))
+                    audiofile=eyed3.load(new_filename)
+                    audiofile.tag.album_artist=links[0]['channel']
+                    audiofile.tag.title=video.title
+                    res=requests.get(links[0]["thumbnails"][0])
+                    audiofile.tag.images.set(3, res.content , "" ,u"")
+                    audiofile.tag.save()
+                except:
+                    print("FFMPEG error")
+        except:
+            print("Song not available on stream servers")
 def run(search_key):
     if(search_key[:5]=="https"):
         broken_url=search_key.split("/")
