@@ -1,0 +1,6 @@
+youtube_search
+eyed3 
+requests 
+bs4 
+pytube 
+PyQt5
