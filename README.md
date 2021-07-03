@@ -23,4 +23,4 @@ A python script which downloads any song to your device just by the name of it.
 
 ### To run
 
-* Run `python main.py` or run `main.exe` incase of Windows users.  
+* Run `python3 main.py` for GUI, `python3 youtubedl.py` for NoGUI or run `main.exe` incase of Windows users.  

@@ -36,9 +36,9 @@ def downloader(name):
             res=requests.get(links[0]["thumbnails"][0])
             audiofile.tag.images.set(3, res.content , "" ,u"")
             audiofile.tag.save()
-        except:
+        except Exception:
             print("FFMPEG error")
-    except:
+    except Exception:
         print("Song not available on stream servers")
 
 def downloaderytpl(name):
@@ -72,9 +72,9 @@ def downloaderytpl(name):
                     res=requests.get(links[0]["thumbnails"][0])
                     audiofile.tag.images.set(3, res.content , "" ,u"")
                     audiofile.tag.save()
-                except:
+                except Exception:
                     print("FFMPEG error")
-        except:
+        except Exception:
             print("Song not available on stream servers")
 def run(search_key):
     if(search_key[:5]=="https"):
@@ -89,17 +89,17 @@ def run(search_key):
                 for song_first in soup.find_all('span', {'class': 'track-name'}):
                     try:
                         songs_first_l.append(song_first.text.strip())
-                    except:
+                    except Exception:
                         pass
                     for song_last in soup.find_all('span',{'class':'artists-albums'}):
                         try:
                             songs_last_l.append(song_last.text.strip())
-                        except:
+                        except Exception:
                             pass
                     for song_creat in soup.find_all('span',{'class':r"creator-name"'\\'}):
                         try:
                             songs_last_l.append(song_creat.text.strip())
-                        except:
+                        except Exception:
                             pass
                 for f,l in zip(songs_first_l,songs_last_l):
                     songs_list.append(f+" "+l)
@@ -113,3 +113,9 @@ def run(search_key):
 
     else:
         downloader(search_key)
+
+#for anyone who wants to run without GUI.
+if __name__ == '__main__':
+    url = input("Enter Song Name/Playlist url: ")
+    run(url)
+
