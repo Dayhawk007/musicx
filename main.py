@@ -1,14 +1,26 @@
 from PyQt5.QtWidgets import  QApplication,QWidget,QLineEdit, QMessageBox,QPushButton,QLabel
 import sys
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
-from PyQt5 import QtGui
+from PyQt5.QtCore import pyqtSlot,QThread
 import youtubedl
+
+class Thread(QThread):
+    def __init__(self,name):
+        QThread.__init__(self)
+        self.name = name
+    #def setName(self,name):
+      #  self.name = name
+    def run(self):
+        youtubedl.run(self.name)
+        print("Downloaded")
+
 class homepage(QWidget):
     def __init__(self):
         super().__init__()
-
         self.initUI()
+    status_thread=False
+    name=""
+
     def initUI(self):
         self.setGeometry(600,400,600,400)
         self.setWindowTitle("Music-downloader")
@@ -29,15 +41,13 @@ class homepage(QWidget):
     @pyqtSlot()
     def on_click(self):
         self.setWindowTitle("Music-downloader(downloading)")
-        name=self.textbox.text()
-        self.msg.setText("Downloaded")
-        youtubedl.run(name)
-        self.msg.exec_()
-        self.setWindowTitle("Music-downloader(downloaded)")
+        name = self.textbox.text()
+        self.thread=Thread(name)
+        self.thread.start()
 
 def main():
     app=QApplication(sys.argv)
-    eg=homepage()
+    hp=homepage()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
