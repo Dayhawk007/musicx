@@ -1,6 +1,7 @@
-youtube_search
-eyed3 
-requests 
-bs4 
-pytube 
-PyQt5
+eyed3~=0.9.6
+requests~=2.25.1
+bs4~=0.0.1
+pytube~=10.8.5
+PyQt5~=5.15.4
+colored~=1.4.2
+beautifulsoup4~=4.9.3
